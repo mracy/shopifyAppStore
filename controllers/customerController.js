@@ -85,10 +85,10 @@ const getMostValuableCustomers = async (req, res) => {
   try {
     // Fetch customers sorted by totalPurchase in descending order
     const customers = await Customer.find().sort({ totalPurchase: -1 }).limit(5);
-    res.json(customers);
+    res.status(200).json(customers);
   } catch (error) {
     console.error('Error fetching customers:', error);
-    res.status(500).json({ message: 'Error fetching customers' });
+    res.status(500).json({ error: 'Failed to fetch customers' });
   }
 };
 

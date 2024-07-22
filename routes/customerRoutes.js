@@ -1,29 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const customerController = require('../controllers/customerController');
-
-// Route to create a new customer
-router.post('/create', customerController.createCustomer);
-
-// Route to get a customer by ID
-router.get('/:id', customerController.getCustomerById);
-
-// Route to add a new customer (if different from create)
-router.post('/', customerController.addCustomer);
+const { getMostValuableCustomers } = require('../controllers/customerController');
+const {
+    createCustomer,
+    getCustomerById,
+    getCustomers,
+    updateCustomer,
+    deleteCustomer
+} = require('../controllers/customerController');
 
 // Route to get all customers
-router.get('/', customerController.getCustomers);
+router.get('/', getCustomers);
 
-// Route to update a customer by ID
-router.put('/:id', customerController.updateCustomer);
+// Route to create a new customer
+router.post('/', createCustomer);
 
-// Route to delete a customer by ID
-router.delete('/:id', customerController.deleteCustomer);
+// Route to get customer by ID
+router.get('/:id', getCustomerById);
 
-const getMostValuableCustomers = () => {
+// Route to update customer by ID
+router.put('/:id', updateCustomer);
 
-};
+// Route to delete customer by ID
+router.delete('/:id', deleteCustomer);
+
 // Route to get most valuable customers
-router.get('/most-valuable', getMostValuableCustomers);
+router.get('/customers/most-valuable', getMostValuableCustomers); // Corrected route
 
 module.exports = router;

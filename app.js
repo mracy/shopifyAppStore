@@ -32,7 +32,7 @@ connectDB();
 
 // Set up routes
 app.use('/api/products', productRoutes);
-app.use('/api/customers', customerRoutes);
+app.use('/api/customers', customerRoutes); // Updated route prefix
 app.use('/api/orders', orderRoutes);
 
 // Start the server
