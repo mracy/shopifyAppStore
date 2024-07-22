@@ -2,23 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const customerSchema = new Schema({
-  name: { type: String, required: true },
-  totalPurchase: { type: Number, required: true },
   customerId: { type: String, required: true },
   email: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  phone: { type: String },
+  phone: { type: String, required: true },
   addresses: [
     {
-      id: { type: String },
-      address1: { type: String },
-      address2: { type: String },
-      city: { type: String },
-      province: { type: String },
-      country: { type: String },
-      zip: { type: String },
-      phone: { type: String }
+      id: String,
+      address1: String,
+      address2: String,
+      city: String,
+      province: String,
+      country: String,
+      zip: String,
+      phone: String,
+      _id: Schema.Types.ObjectId
     }
   ],
   createdAt: { type: Date, default: Date.now },
@@ -26,14 +25,14 @@ const customerSchema = new Schema({
   ordersCount: { type: Number, default: 0 },
   totalSpent: { type: Number, default: 0 },
   tags: [String],
-  note: { type: String, default: "" },
+  note: String,
   verifiedEmail: { type: Boolean, default: false },
   acceptsMarketing: { type: Boolean, default: false },
-  lastOrderId: { type: Schema.Types.ObjectId, ref: 'Order', default: null },
-  lastOrderName: { type: String, default: "" },
-  purchasedProducts: [{ type: Schema.Types.ObjectId, ref: 'Product' }]
+  lastOrderId: String,
+  lastOrderName: String,
+  purchasedProducts: [String],
+  __v: { type: Number, select: false }
 });
 
 const Customer = mongoose.model('Customer', customerSchema);
-
 module.exports = Customer;

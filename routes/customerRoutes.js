@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const customerController = require('../controllers/customerController'); // Import the controller
 const { getMostValuableCustomers } = require('../controllers/customerController');
 const {
     createCustomer,
@@ -13,7 +14,7 @@ const {
 router.get('/', getCustomers);
 
 // Route to create a new customer
-router.post('/', createCustomer);
+router.post('/customers', customerController.createCustomer);
 
 // Route to get customer by ID
 router.get('/:id', getCustomerById);

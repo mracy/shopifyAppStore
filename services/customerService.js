@@ -5,13 +5,14 @@ const Customer = require('../models/Customer');
 const getTopValuableCustomers = async () => {
   try {
     return await Customer.aggregate([
-      { $sort: { totalPurchaseValue: -1 } },
+      { $sort: { totalSpent: -1 } },
       { $limit: 5 }
     ]);
   } catch (error) {
     throw new Error('Error fetching top valuable customers: ' + error.message);
   }
 };
+
 
 // Calculate and update most valuable customers based on Shopify orders
 const calculateMostValuableCustomers = async () => {
@@ -38,14 +39,15 @@ const calculateMostValuableCustomers = async () => {
       );
     }
 
-    // Retrieve top 5 customers
-    const topCustomers = await getTopValuableCustomers();
+    // Retrieve and sort top 5 customers
+    const topCustomers = await Customer.find().sort({ totalSpent: -1 }).limit(5);
     return topCustomers;
   } catch (error) {
     console.error('Error calculating most valuable customers:', error);
     throw new Error('Failed to calculate most valuable customers');
   }
 };
+
 
 module.exports = {
   getTopValuableCustomers,
