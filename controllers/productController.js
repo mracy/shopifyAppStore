@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Order = require('../models/Order');
 const productService = require('../services/productService');
 
 // Create a new product
@@ -66,6 +67,22 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// Get top-selling products
+const getTopSellingProducts = async (req, res) => {
+  try {
+    // Fetch top 5 products based on quantitySold in descending order
+    const topSellingProducts = await Product.find()
+        .sort({ quantitySold: -1 })
+        .limit(5)
+        .exec();
+
+    res.json(topSellingProducts);
+  } catch (error) {
+    console.error('Error fetching top-selling products:', error);
+    res.status(500).json({ message: 'Error fetching top-selling products', error });
+  }
+};
+
 // Get best-selling products
 const getBestSellingProducts = async (req, res) => {
   try {
@@ -83,5 +100,6 @@ module.exports = {
   getProductById,
   updateProduct,
   deleteProduct,
-  getBestSellingProducts,
+  getTopSellingProducts,
+  getBestSellingProducts
 };

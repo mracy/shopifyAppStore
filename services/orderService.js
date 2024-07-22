@@ -20,9 +20,9 @@ const updateOrderStatus = async (id, status) => {
     }
 
     const order = await Order.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true, runValidators: true } // Return the updated order and run validators
+        id,
+        { status },
+        { new: true, runValidators: true } // Return the updated order and run validators
     );
 
     if (!order) {

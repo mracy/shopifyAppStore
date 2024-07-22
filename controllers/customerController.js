@@ -80,18 +80,18 @@ const deleteCustomer = async (req, res) => {
   }
 };
 
-// Get most valuable customers
+// Function to get the most valuable customers
 const getMostValuableCustomers = async (req, res) => {
   try {
-    const customers = await Customer.find()
-      .sort({ totalSpent: -1 })
-      .limit(5);
-    res.status(200).json(customers);
+    // Fetch customers sorted by totalPurchase in descending order
+    const customers = await Customer.find().sort({ totalPurchase: -1 }).limit(5);
+    res.json(customers);
   } catch (error) {
-    console.error('Error fetching most valuable customers:', error);
-    res.status(500).json({ error: 'Failed to fetch most valuable customers' });
+    console.error('Error fetching customers:', error);
+    res.status(500).json({ message: 'Error fetching customers' });
   }
 };
+
 
 module.exports = {
   createCustomer,

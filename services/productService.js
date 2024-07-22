@@ -1,6 +1,8 @@
-const { getOrders } = require('./shopifyService');
-const Product = require('../models/Product');
+const { getOrders } = require('./shopifyService'); // Adjust path as needed
+const Product = require('../models/Product'); // Adjust path as needed
+const mongoose = require('mongoose');
 
+// Calculate best-selling products
 const calculateBestSellingProducts = async () => {
   try {
     // Fetch orders from Shopify
@@ -13,10 +15,11 @@ const calculateBestSellingProducts = async () => {
     // Aggregate sales quantities for each product
     orders.forEach(order => {
       order.line_items.forEach(item => {
-        if (!productSales[item.product_id]) {
-          productSales[item.product_id] = 0;
+        const productId = item.product_id.toString();
+        if (!productSales[productId]) {
+          productSales[productId] = 0;
         }
-        productSales[item.product_id] += item.quantity;
+        productSales[productId] += item.quantity;
       });
     });
 
@@ -25,18 +28,24 @@ const calculateBestSellingProducts = async () => {
 
     // Update the Product collection with quantitySold
     for (const [productId, quantitySold] of Object.entries(productSales)) {
-      const result = await Product.updateOne(
-        { productId: productId },
-        { $inc: { quantitySold: quantitySold } }  // Increment quantitySold
-      );
-      // Log update result
-      console.log(`Updated product ${productId} with quantitySold ${quantitySold}:`, result);
+      // Ensure productId is valid
+      if (mongoose.Types.ObjectId.isValid(productId)) {
+        const result = await Product.updateOne(
+            { _id: mongoose.Types.ObjectId(productId) },
+            { $inc: { quantitySold: quantitySold } }, // Increment quantitySold
+            { upsert: true }
+        );
+        // Log update result
+        console.log(`Updated product ${productId} with quantitySold ${quantitySold}:`, result);
+      } else {
+        console.error(`Invalid ObjectId: ${productId}`);
+      }
     }
 
     // Retrieve top 5 products sorted by quantitySold
     const topProducts = await Product.find({})
-      .sort({ quantitySold: -1 })
-      .limit(5);
+        .sort({ quantitySold: -1 })
+        .limit(5);
 
     // Log top 5 products
     console.log('Top 5 products:', JSON.stringify(topProducts, null, 2));
